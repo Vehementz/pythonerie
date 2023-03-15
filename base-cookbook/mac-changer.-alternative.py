@@ -4,11 +4,20 @@
 # command python mac-changer.py --help
 # command python mac-changer.py --interface wlan0 --mac 00:11:22:33:44:55
 
-  
+ 
 
 
 import subprocess
 import optparse
+
+def change_mac(interface, new_mac):
+    print("[+] Changing the MAC address for interface " + interface + " to " + new_mac)
+    subprocess.call("ifconfig", shell=True)
+    subprocess.call("ifconfig " + interface + " down", shell=True)
+    subprocess.call("ifconfig " + interface + " hw ether " + new_mac, shell=True)
+    subprocess.call("ifconfig " + interface + " up", shell=True)
+
+
 
 parser = optparse.OptionParser()
 
@@ -29,16 +38,9 @@ interface = options.interface
 new_mac = options.new_mac
 
 
-print("[+] Changing the MAC address for interface " + interface + " to " + new_mac)
 
 # Permet de voir les interfaces réseau
 
 
-subprocess.call("ifconfig", shell=True)
-subprocess.call("ifconfig " + interface + " down", shell=True)
-subprocess.call("ifconfig " + interface + " hw ether " + new_mac, shell=True)
-subprocess.call("ifconfig " + interface + " up", shell=True)
-
-print("SUCCESS")
-
+change_mac(options.interface, options.new_mac)
 
